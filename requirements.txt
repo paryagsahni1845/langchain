@@ -7,3 +7,5 @@ arxiv
 pymupdf
 wikipedia
 langchain-text-splitters
+python-dotenv
+chromadb

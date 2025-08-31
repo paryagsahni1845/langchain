@@ -9,3 +9,5 @@ wikipedia
 langchain-text-splitters
 python-dotenv
 chromadb
+sentence_transformers
+langchain_huggingface

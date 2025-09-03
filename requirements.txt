@@ -16,3 +16,6 @@ chromadb
 langchain_chroma 
 langchain-openai
 langchain-groq
+langchain-core
+beautifulsoup4
+# pip install -r requirements.txt

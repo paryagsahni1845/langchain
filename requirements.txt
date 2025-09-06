@@ -18,4 +18,5 @@ langchain-openai
 langchain-groq
 langchain-core
 beautifulsoup4
+streamlit
 # pip install -r requirements.txt

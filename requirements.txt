@@ -19,4 +19,8 @@ langchain-groq
 langchain-core
 beautifulsoup4
 streamlit
+fastapi
+uvicorn
+langserve
+sse_starlette
 # pip install -r requirements.txt

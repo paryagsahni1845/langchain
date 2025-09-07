@@ -8,7 +8,7 @@ from langserve import add_routes   #create apis
 load_dotenv()
 
 #model
-groq_api_key=os.getenv("GROQ_API_KEY")
+# groq_api_key=os.getenv("GROQ_API_KEY")
 model = ChatGroq(api_key=groq_api_key,model="llama-3.3-70b-versatile", temperature=0.7)
 
 #prompt template - convert into list of message 

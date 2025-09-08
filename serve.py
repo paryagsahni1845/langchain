@@ -3,39 +3,51 @@ from fastapi import FastAPI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_groq import ChatGroq
+from langserve import add_routes
 import os
-from langserve import add_routes   #create apis
+import uvicorn
+
+# Load environment variables
 load_dotenv()
 
-#model
-groq_api_key=os.getenv("GROQ_API_KEY")
-model = ChatGroq(api_key=groq_api_key,model="llama-3.3-70b-versatile", temperature=0.7)
+# Get GROQ API key and handle missing key
+groq_api_key = os.getenv("GROQ_API_KEY")
+if not groq_api_key:
+    raise ValueError("GROQ_API_KEY not found in environment variables.")
 
-#prompt template - convert into list of message 
-from langchain_core.prompts import ChatPromptTemplate
-
-template = "translate the following into {language}"
-
-prompt = ChatPromptTemplate.from_messages(
-    [("system",template),("user","{text}")]
+# Initialize the model
+model = ChatGroq(
+    api_key=groq_api_key,
+    model="llama-3.3-70b-versatile",
+    temperature=0.7
 )
 
-#parser
+# Define the prompt template
+prompt = ChatPromptTemplate.from_messages([
+    ("system", "You are a helpful translator. Translate the following text into {language}."),
+    ("user", "{text}")
+])
+
+# Define the parser
 parser = StrOutputParser()
 
-#chain
-chain = prompt|model|parser
+# Create the LangChain expression language chain
+chain = prompt | model | parser
 
-#app
-app = FastAPI(title="langchain server",
-              version="1.0",
-              description="simple app interface")
-
-#add route
-add_routes(
-    app,chain,path="/chain",playground_type="default"
+# Initialize FastAPI app
+app = FastAPI(
+    title="LangChain Translation Server",
+    version="1.0",
+    description="A simple API for translating text using LangChain and Groq."
 )
 
-if __name__=="__main__":
-    import uvicorn
-    uvicorn.run(app,host="127.0.0.1",port=8000)
+# Add routes for the chain
+add_routes(
+    app,
+    chain,
+    path="/translate",
+    playground_type="default"
+)
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="127.0.0.1", port=8000)

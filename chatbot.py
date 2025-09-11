@@ -4,7 +4,7 @@
 
 ''' how to design and implement a llm powered chatbot (this one will only use language model for coversation)'''
 
-from ast import Store
+from fast import Store
 import os
 from dotenv import load_dotenv
 load_dotenv()
@@ -61,6 +61,8 @@ response=with_message_history.invoke(
     config=config1
 )
 print("Chat2 - Bot:", response.content)
+
+'''prompt template'''
 
 
 

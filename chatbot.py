@@ -125,6 +125,13 @@ response = with_message_history.invoke(
     config=config,
 )
 
+'''### Managing the Conversation History
+One important concept to understand when building chatbots is how to manage conversation history. 
+If left unmanaged, the list of messages will grow unbounded and potentially overflow the context window of the LLM.
+Therefore, it is important to add a step that limits the size of the messages you are passing in.
+'trim_messages' helper to reduce how many messages we're sending to the model. The trimmer allows us to specify how many tokens we want to keep,
+along with other parameters like if we want to always keep the system message and whether to allow partial messages'''
+
 
 from langchain_core.messages import SystemMessage,trim_messages
 trimmer=trim_messages(
@@ -149,3 +156,50 @@ messages = [
     AIMessage(content="yes!"),
 ]
 trimmer.invoke(messages)
+
+from operator import itemgetter
+
+from langchain_core.runnables import RunnablePassthrough
+
+chain=(
+    RunnablePassthrough.assign(messages=itemgetter("messages")|trimmer)
+    | prompt
+    | model
+    
+)
+
+response=chain.invoke(
+    {
+    "messages":messages + [HumanMessage(content="What ice cream do i like")],
+    "language":"English"
+    }
+)
+response.content
+
+## Lets wrap this in the MEssage History
+with_message_history = RunnableWithMessageHistory(
+    chain,
+    get_session_history,
+    input_messages_key="messages",
+)
+config={"configurable":{"session_id":"chat5"}}
+
+response = with_message_history.invoke(
+    {
+        "messages": messages + [HumanMessage(content="whats my name?")],
+        "language": "English",
+    },
+    config=config,
+)
+
+response.content
+
+response = with_message_history.invoke(
+    {
+        "messages": [HumanMessage(content="what math problem did i ask?")],
+        "language": "English",
+    },
+    config=config,
+)
+
+print(response.content)

@@ -1,7 +1,7 @@
 import streamlit as st
 from langchain_groq import ChatGroq
-from langchain_community.utilities import ArxivAPIWrapper, WikipediaAPIWrapper
-from langchain_community.tools import ArxivQueryRun, WikipediaQueryRun, DuckDuckGoSearchResults
+from langchain_community.utilities import ArxivAPIWrapper, WikipediaAPIWrapper 
+from langchain_community.tools import ArxivQueryRun, WikipediaQueryRun, DuckDuckGoSearchResults 
 from langchain.agents import initialize_agent, AgentType
 from langchain.callbacks import StreamlitCallbackHandler
 from dotenv import load_dotenv

@@ -16,3 +16,6 @@ chromadb
 langchain_chroma 
 duckduckgo-search
 google-genai
+pinecone-client
+pinecone-text
+pinecone-notebooks
